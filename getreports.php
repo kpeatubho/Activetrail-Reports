@@ -38,6 +38,14 @@ if (!empty($argv)) {
 if (isset($_GET['all']))
 	$all = 'all';
 
+if (isset($_GET['from'])) {
+	$fromDate = $_GET['from'];
+}
+
+if (isset($_GET['to'])) {
+	$toDate = $_GET['to'];
+}
+
 require_once($_SERVER['DOCUMENT_ROOT'] . '/api/ActiveTrail.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/libs/vendor/autoload.php');
 $token = '0XEE1020FBC5B72A26140B8B5EB0E2A22BD6661DC096BCF1BB20D339822E4EB8AAA0EAFF531531B61A794950935B49ECD5';
