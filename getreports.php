@@ -3,11 +3,8 @@ $runScript = true;
 if (!$runScript)
 	die("The script is not allowed to run");
 
-if (php_sapi_name() === 'cli') {
-	$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__);
-} else {
-	ini_set('max_execution_time', 3600);
-}
+$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__);	
+ini_set('max_execution_time', 7200);
 
 $fromDate = null;
 $toDate = null;
@@ -317,7 +314,14 @@ try {
 	if (!empty($all)) {
 		$file = $_SERVER['DOCUMENT_ROOT'] . "/ActiveTrail_all.xlsx";
 	} else {
-		$file = $_SERVER['DOCUMENT_ROOT'] . "/ActiveTrail_" . date("Y-m-d") . ".xlsx";
+		$dateSign = '';
+		if (isset($dates['FromDate'])) {
+			$dateSign .= ($dateSign == '' ? '' : '_') . $dates['FromDate'];
+		}
+		if (isset($dates['ToDate'])) {
+			$dateSign .= ($dateSign == '' ? '' : '_') . $dates['ToDate'];
+		}
+		$file = $_SERVER['DOCUMENT_ROOT'] . "/ActiveTrail_" . $dateSign . ".xlsx";
 	}
 //	$writer = IOFactory::createWriter($spreadsheet, "Xlsx");
 	$writer->save($file);
