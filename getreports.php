@@ -321,6 +321,9 @@ try {
 		if (isset($dates['ToDate'])) {
 			$dateSign .= ($dateSign == '' ? '' : '_') . $dates['ToDate'];
 		}
+		if ($dateSign == '') {
+			$dateSign = 'all';
+		}
 		$file = $_SERVER['DOCUMENT_ROOT'] . "/ActiveTrail_" . $dateSign . ".xlsx";
 	}
 //	$writer = IOFactory::createWriter($spreadsheet, "Xlsx");
