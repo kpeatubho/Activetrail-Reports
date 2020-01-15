@@ -19,7 +19,10 @@ class ActiveTrail {
             $params = [];
         }
         $params = http_build_query($params);
-        $url = !empty($params) ? $this->endPoint . $function . "?" . $params : $this->endPoint . $function;
+		$url = !empty($params) ? $this->endPoint . $function . "?" . $params : $this->endPoint . $function;
+		if (php_sapi_name() === 'cli') {
+			echo $url . PHP_EOL;
+		}
 		$headers = [
 			'Authorization: ' . $this->apiToken,
 			'Accept: application/json',
@@ -27,15 +30,12 @@ class ActiveTrail {
 		];
 		$curlOptions = [
 			CURLOPT_URL => $url,
-//			CURLOPT_HEADER => 1,
 			CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_VERBOSE => 1,
             CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_FOLLOWLOCATION => 1,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_SSL_VERIFYHOST => false,
-//            CURLOPT_REFERER => "http://" . $_SERVER['SERVER_NAME']
+			CURLOPT_SSL_VERIFYHOST => false
 		];
 		$ch = curl_init();
         curl_setopt_array($ch, $curlOptions);
