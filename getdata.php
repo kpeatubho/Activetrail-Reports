@@ -13,7 +13,7 @@ if (!is_dir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'storage')) {
 $storageCampaigns = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'storage/campaigns.json';
 $storageDate = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'storage/data.json';
 ini_set('max_execution_time', 12 * 3600);
-ini_set('memory_limit', '3069M');
+ini_set('memory_limit', '4096M');
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/api/ActiveTrail.php');
 $token = '0XEE1020FBC5B72A26140B8B5EB0E2A22BD6661DC096BCF1BB20D339822E4EB8AAA0EAFF531531B61A794950935B49ECD5';
@@ -41,7 +41,7 @@ if (file_exists($storageDate)) {
 // Get contacts
 $params = array_merge([
 	'Limit' => 100,
-	'CustomerStates' => '-2'
+	'CustomerStates' => '-1'
 ]);
 $allContacts = [];
 $page = 0;
