@@ -87,6 +87,8 @@ foreach ($allCampaigns as $allCampaign) {
 	}
 }
 
+$clientIdRelations = [];
+
 foreach ($allCampaigns as $allCampaign) {
 
 	if (php_sapi_name() === 'cli') {
@@ -112,9 +114,14 @@ foreach ($allCampaigns as $allCampaign) {
 						if (isset($allContacts[$report['email']])) {
 							$client_id = $allContacts[$report['email']]['client_id'];
 							if (!$client_id && $allContacts[$report['email']]['id']) {
-								$contact = $activeTrail->getContact($allContacts[$report['email']]['id']);
-								if ($contact) {
-									$client_id = $contact['ext6'];
+								if (!isset($clientIdRelations[$allContacts[$report['email']]['id']])) {
+									$remoteContact = $activeTrail->getContact($allContacts[$report['email']]['id']);
+									if ($remoteContact) {
+										$client_id = $remoteContact['ext6'];
+									}
+									$clientIdRelations[$allContacts[$report['email']]['id']] = $client_id;
+								} else {
+									$client_id = $clientIdRelations[$allContacts[$report['email']]['id']];
 								}
 							}
 						}
@@ -164,6 +171,17 @@ foreach ($allCampaigns as $allCampaign) {
 						if (isset($allData[$allCampaign['campaign_id']][$contact['email']])) {
 							if (!isset($allData[$allCampaign['campaign_id']][$contact['email']]['click_date']) || is_null($allData[$allCampaign['campaign_id']][$contact['email']]['click_date'])) {
 								$allData[$allCampaign['campaign_id']][$contact['email']]['click_date'] = date('Y-m-d H:i:s', strtotime($contact['click_date']));
+							}
+							if (!$allData[$allCampaign['campaign_id']][$contact['email']]['client_id'] && $contact['contact_id']) {
+								if (!isset($clientIdRelations[$contact['contact_id']])) {
+									$remoteContact = $activeTrail->getContact($contact['contact_id']);
+									if ($conremoteContacttact) {
+										$allData[$allCampaign['campaign_id']][$contact['email']]['client_id'] = $remoteContact['ext6'];
+									}
+									$clientIdRelations[$contact['contact_id']] = $allData[$allCampaign['campaign_id']][$contact['email']]['client_id'];
+								} else {
+									$allData[$allCampaign['campaign_id']][$contact['email']]['client_id'] = $clientIdRelations[$contact['contact_id']];
+								}
 							}
 						}
 					}										
