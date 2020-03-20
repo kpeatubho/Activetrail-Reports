@@ -53,6 +53,7 @@ do {
 		foreach ($contacts as $contact) {
 			if (isset($contact['email']) && $contact['email'] != '') {
 				$allContacts[$contact['email']] = [
+					'id' => $contact['id'],
 					'client_id' => $contact['ext6']
 				];
 			}
@@ -107,13 +108,23 @@ foreach ($allCampaigns as $allCampaign) {
 			if ($reports != false) {
 				foreach ($reports as $report) {
 					if (isset($report['email']) && $report['email'] != '') {
+						$client_id = '';
+						if (isset($allContacts[$report['email']])) {
+							$client_id = $allContacts[$report['email']]['client_id'];
+							if (!$client_id && $allContacts[$report['email']]['id']) {
+								$contact = $activeTrail->getContact($allContacts[$report['email']]['id']);
+								if ($contact) {
+									$client_id = $contact['ext6'];
+								}
+							}
+						}
 						$allData[$allCampaign['campaign_id']][$report['email']] = [
 							'campaign_id' => $allCampaign['campaign_id'],
 							'campaign_name' => $allCampaign['campaign_name'],
 							'email' => $report['email'],
 							'first_name' => isset($report['first_name']) ? $report['first_name'] : '',
 							'last_name' => isset($report['last_name']) ? $report['last_name'] : '',
-							'client_id' => isset($allContacts[$report['email']]) ? $allContacts[$report['email']]['client_id'] : '',
+							'client_id' => $client_id,
 							'sent_date' => date('Y-m-d H:i:s', strtotime($allCampaign['last_sent_date'])),
 							'open_date' => null,
 							'click_date' => null

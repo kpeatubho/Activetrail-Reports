@@ -158,6 +158,15 @@ class ActiveTrail {
 		return $return;
 	}
 
+	public function getContact($id) {
+		$return = false;
+		$result = $this->query("contacts/$id");
+		if ($result !== false) {
+			$return = $result;
+		}
+		return $return;
+	}
+
 }
 
 ?>
