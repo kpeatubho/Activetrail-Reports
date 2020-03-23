@@ -125,12 +125,19 @@ foreach ($allCampaigns as $allCampaign) {
 								}
 							}
 						}
+						$last_name = isset($report['last_name']) ? $report['last_name'] : '';
+						if (is_numeric($last_name)) {
+							if (!$client_id) {
+								$client_id = $last_name;
+							}
+							$last_name = '';
+						}
 						$allData[$allCampaign['campaign_id']][$report['email']] = [
 							'campaign_id' => $allCampaign['campaign_id'],
 							'campaign_name' => $allCampaign['campaign_name'],
 							'email' => $report['email'],
 							'first_name' => isset($report['first_name']) ? $report['first_name'] : '',
-							'last_name' => isset($report['last_name']) ? $report['last_name'] : '',
+							'last_name' => $last_name,
 							'client_id' => $client_id,
 							'sent_date' => date('Y-m-d H:i:s', strtotime($allCampaign['last_sent_date'])),
 							'open_date' => null,
@@ -175,7 +182,7 @@ foreach ($allCampaigns as $allCampaign) {
 							if (!$allData[$allCampaign['campaign_id']][$contact['email']]['client_id'] && $contact['contact_id']) {
 								if (!isset($clientIdRelations[$contact['contact_id']])) {
 									$remoteContact = $activeTrail->getContact($contact['contact_id']);
-									if ($conremoteContacttact) {
+									if ($remoteContact) {
 										$allData[$allCampaign['campaign_id']][$contact['email']]['client_id'] = $remoteContact['ext6'];
 									}
 									$clientIdRelations[$contact['contact_id']] = $allData[$allCampaign['campaign_id']][$contact['email']]['client_id'];
