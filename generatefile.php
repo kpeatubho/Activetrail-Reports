@@ -97,7 +97,18 @@ foreach ($campaignsList as $campaignId) {
 try {
 	$writer = new Xlsx($spreadsheet);
 	$file = $_SERVER['DOCUMENT_ROOT'] . '/activetrail_export.xlsx';
+	$remoteFile = 'ronen/activetrail_export.xlsx';
 	$writer->save($file);
+
+	$connectionId = ftp_connect('192.116.49.57');
+	if ($connectionId) {
+		$loginResult = ftp_login($connectionId, 'ftp', 'ftp');
+		if ($loginResult) {
+			ftp_put($connectionId, $remoteFile, $file, FTP_ASCII);
+		}
+		ftp_close($connectionId);
+	}
+
 } catch (PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
 	echo $e->getMessage();
 }
