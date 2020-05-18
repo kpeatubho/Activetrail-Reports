@@ -104,7 +104,7 @@ try {
 	if ($connectionId) {
 		$loginResult = ftp_login($connectionId, 'ftp', 'ftp');
 		if ($loginResult) {
-			ftp_put($connectionId, $remoteFile, $file, FTP_ASCII);
+			ftp_put($connectionId, $remoteFile, $file, FTP_BINARY);
 		}
 		ftp_close($connectionId);
 	}
